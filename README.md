@@ -1,0 +1,2 @@
+# AdCap-Offline
+Offline Edition
