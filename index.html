@@ -469,6 +469,7 @@
                 profitPerUnit: business.profitPerUnit,
                 speed: business.speed,
                 priceMultiplier: business.priceMultiplier,
+                isFree: business.isFree || false,
                 owned: 0,
                 nextPayoutAt: Date.now() + (business.speed * 1000)
             }));
