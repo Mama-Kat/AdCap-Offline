@@ -609,44 +609,52 @@
 
                 const currentProfit = getCurrentProfit(business);
                 const currentPrice = calculateCurrentPrice(business);
-                const canAfford = gameState.dollars >= currentPrice;
                 const now = Date.now();
-                const timeSinceLast = Math.max(0, now - (business.nextPayoutAt - (business.speed * 1000)));
-                const progressPercent = Math.min((timeSinceLast / (business.speed * 1000)) * 100, 100);
+                const timeUntilPayout = Math.max(0, business.nextPayoutAt - now);
+                const progressPercent = Math.min(100 - ((timeUntilPayout / (business.speed * 1000)) * 100), 100);
+                const timeRemaining = (timeUntilPayout / 1000).toFixed(1);
 
                 const profitDisplay = currentProfit === 0 ? '$0' : '$' + formatCurrency(currentProfit);
+                const isFirst = business.id === 'lemonade';
+                const canAfford = gameState.dollars >= currentPrice;
+                const isFree = isFirst && business.owned === 0;
+
+                const buyButtonText = isFree ? 'FREE' : `Buy x1 ${formatCurrency(currentPrice)}`;
+                const buyButtonDisabled = !isFree && !canAfford;
 
                 card.innerHTML = `
-                    <div class="business-header">
-                        <div class="business-title">
-                            <span class="business-icon">${business.icon}</span>
-                            <span>${business.name}</span>
+                    <div class="business-icon-circle" onclick="clickBusiness('${business.id}')">
+                        ${business.icon}
+                    </div>
+                    <div class="business-info">
+                        <div class="business-header">
+                            <div class="business-name">${business.name}</div>
+                            <div class="business-profit">${profitDisplay}</div>
                         </div>
-                        <div class="business-profit">Profit: ${profitDisplay}</div>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
-                        <div class="progress-text">${(business.speed * (100 - progressPercent) / 100).toFixed(1)}s</div>
-                    </div>
-                    <div class="business-stats">
-                        <div class="owned-info">
-                            Owned: <span class="owned-count">${business.owned}</span>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
+                            <div class="progress-text">${timeRemaining}s</div>
+                        </div>
+                        <div class="business-footer">
+                            <span>Owned: <span class="owned-count">${business.owned}</span></span>
+                            <button class="buy-button" ${buyButtonDisabled ? 'disabled' : ''} onclick="buyBusiness('${business.id}')">
+                                ${isFree ? '<span class="free-badge">FREE</span>' : buyButtonText}
+                            </button>
                         </div>
                     </div>
-                    <button class="buy-button" ${!canAfford ? 'disabled' : ''} onclick="buyBusiness('${business.id}')">
-                        Buy x1 ${formatCurrency(currentPrice)}
-                    </button>
                 `;
-
-                // Add click handler for entire card (except button)
-                card.addEventListener('click', (e) => {
-                    // Don't trigger card click if button was clicked
-                    if (e.target.classList.contains('buy-button')) return;
-                    clickBusiness(business.id);
-                });
 
                 container.appendChild(card);
             });
+        }
+
+        // ============================================
+        // UI INTERACTIONS
+        // ============================================
+
+        function toggleMenu() {
+            const menuButtons = document.getElementById('menu-buttons');
+            menuButtons.classList.toggle('show');
         }
 
         // ============================================
