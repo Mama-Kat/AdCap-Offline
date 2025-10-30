@@ -18,36 +18,42 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
 
         .game-container {
             width: 100%;
-            max-width: 600px;
+            max-width: 380px;
+            height: 100vh;
+            max-height: 100vh;
             background-color: #f5f5f5;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
             background-color: #2a7f5e;
             color: #ffffff;
-            padding: 15px;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
+            flex-shrink: 0;
         }
 
         .close-btn {
             background: none;
             border: none;
             color: white;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
-            padding: 0 5px;
+            padding: 0;
+            line-height: 1;
         }
 
         .close-btn:hover {
@@ -57,25 +63,27 @@
         .currency-display {
             background-color: #2a7f5e;
             color: #ffffff;
-            padding: 12px 15px;
-            font-size: 13px;
-            line-height: 1.6;
+            padding: 10px 15px;
+            font-size: 12px;
+            line-height: 1.4;
+            flex-shrink: 0;
         }
 
         .currency-item {
             display: flex;
             align-items: center;
-            margin: 3px 0;
+            margin: 2px 0;
         }
 
         .currency-item span:first-child {
-            margin-right: 8px;
-            font-size: 16px;
+            margin-right: 6px;
+            font-size: 14px;
+            min-width: 18px;
         }
 
         .businesses-container {
-            padding: 15px;
-            max-height: 400px;
+            flex: 1;
+            padding: 10px;
             overflow-y: auto;
             background-color: #f5f5f5;
         }
@@ -83,9 +91,11 @@
         .business-card {
             background-color: white;
             border: 1px solid #d0d0d0;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 12px;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
             cursor: pointer;
             transition: background-color 0.1s;
         }
@@ -98,36 +108,51 @@
             background-color: #efefef;
         }
 
+        .business-icon-circle {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            border: 2px solid #d0d0d0;
+        }
+
+        .business-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-width: 0;
+        }
+
         .business-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
+            align-items: flex-start;
+            gap: 8px;
         }
 
-        .business-title {
-            display: flex;
-            align-items: center;
+        .business-name {
             font-weight: bold;
-            font-size: 15px;
+            font-size: 14px;
             color: #333333;
-        }
-
-        .business-icon {
-            font-size: 24px;
-            margin-right: 8px;
         }
 
         .business-profit {
             color: #666666;
-            font-size: 13px;
+            font-size: 12px;
+            white-space: nowrap;
         }
 
         .progress-bar-container {
             background-color: #d0d0d0;
-            height: 20px;
+            height: 16px;
             border-radius: 3px;
-            margin: 8px 0;
+            margin: 6px 0;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -137,7 +162,6 @@
         .progress-bar-fill {
             background-color: #8bc4d4;
             height: 100%;
-            transition: width 0.05s linear;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -145,49 +169,50 @@
 
         .progress-text {
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 11px;
+            width: 100%;
+            text-align: center;
+            font-size: 10px;
             color: #333333;
             font-weight: bold;
             z-index: 10;
             pointer-events: none;
         }
 
-        .business-stats {
+        .business-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 8px 0;
-            font-size: 13px;
+            font-size: 12px;
             color: #666666;
-        }
-
-        .owned-info {
-            display: flex;
-            align-items: center;
         }
 
         .owned-count {
             background-color: #fff3e0;
             border-radius: 3px;
             padding: 2px 6px;
-            margin-left: 4px;
             color: #ff9800;
             font-weight: bold;
         }
 
+        .free-badge {
+            background-color: #4caf50;
+            border-radius: 3px;
+            padding: 2px 6px;
+            color: white;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
         .buy-button {
-            width: 100%;
             background-color: #ff9800;
             color: white;
             border: none;
             border-radius: 4px;
-            padding: 8px;
-            font-size: 13px;
+            padding: 6px 10px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 8px;
+            white-space: nowrap;
             transition: background-color 0.1s;
         }
 
@@ -205,53 +230,49 @@
             opacity: 0.6;
         }
 
-        .tabs-section {
+        .menu-section {
             background-color: #2a7f5e;
             padding: 10px;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 6px;
-            margin-bottom: 10px;
+            flex-shrink: 0;
+            border-top: 1px solid #1a5a48;
         }
 
-        .tab-button {
+        .menu-toggle-btn {
+            width: 100%;
             background-color: #1d5a46;
             color: white;
             border: none;
             border-radius: 4px;
-            padding: 8px;
-            font-size: 11px;
+            padding: 10px;
+            font-size: 12px;
             font-weight: bold;
-            cursor: not-allowed;
-            opacity: 0.5;
-            transition: opacity 0.2s;
+            cursor: pointer;
+            transition: background-color 0.1s;
         }
 
-        .tab-button:hover {
-            opacity: 0.6;
+        .menu-toggle-btn:hover {
+            background-color: #0f3d2f;
         }
 
-        .tabs-row-2 {
-            background-color: #2a7f5e;
-            padding: 6px 10px;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 6px;
-            margin-bottom: 10px;
+        .menu-toggle-btn:active {
+            background-color: #082a21;
         }
 
-        .buttons-section {
-            background-color: #2a7f5e;
-            padding: 12px;
-            display: flex;
+        .menu-buttons {
+            display: none;
             flex-direction: column;
             gap: 8px;
+            margin-top: 8px;
         }
 
-        .button-row {
+        .menu-buttons.show {
             display: flex;
+        }
+
+        .menu-buttons-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 6px;
-            justify-content: center;
         }
 
         .action-button {
@@ -259,11 +280,10 @@
             color: white;
             border: none;
             border-radius: 4px;
-            padding: 10px 20px;
-            font-size: 12px;
+            padding: 8px;
+            font-size: 11px;
             font-weight: bold;
             cursor: pointer;
-            flex: 1;
             transition: background-color 0.1s;
         }
 
@@ -273,22 +293,6 @@
 
         .action-button:active {
             background-color: #082a21;
-        }
-
-        .menu-button {
-            background-color: #1d5a46;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 10px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.1s;
-        }
-
-        .menu-button:hover {
-            background-color: #0f3d2f;
         }
 
         .notification {
@@ -337,7 +341,7 @@
         }
 
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
@@ -346,7 +350,7 @@
 
         ::-webkit-scrollbar-thumb {
             background: #8bc4d4;
-            border-radius: 4px;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -383,31 +387,15 @@
             <!-- Business cards will be generated here -->
         </div>
 
-        <!-- Tab Buttons Row 1 -->
-        <div class="tabs-section">
-            <button class="tab-button" title="Coming in Phase 2">📊 Stats</button>
-            <button class="tab-button" title="Coming in Phase 2">⚡ Upgrades</button>
-            <button class="tab-button" title="Coming in Phase 2">👔 Managers</button>
-            <button class="tab-button" title="Coming in Phase 2">👨 Investors</button>
-        </div>
-
-        <!-- Tab Buttons Row 2 -->
-        <div class="tabs-row-2">
-            <button class="tab-button" title="Coming in Phase 2">🛍️ Shop</button>
-            <button class="tab-button" title="Coming in Phase 2">🎮 Mini Games</button>
-            <button class="tab-button" title="Coming in Phase 2">🎯 Adventures</button>
-            <button class="tab-button" title="Coming in Phase 2">🎲 Cheats</button>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="buttons-section">
-            <div class="button-row">
-                <button class="action-button" onclick="exportGame()">📥 Export</button>
-                <button class="action-button" onclick="importGame()">📤 Import</button>
-                <button class="action-button" onclick="resetGame()">🔄 Reset</button>
-            </div>
-            <div class="button-row">
-                <button class="menu-button" style="width: 100%;">☰ Menu</button>
+        <!-- Menu Section -->
+        <div class="menu-section">
+            <button class="menu-toggle-btn" onclick="toggleMenu()">☰ Menu</button>
+            <div class="menu-buttons" id="menu-buttons">
+                <div class="menu-buttons-row">
+                    <button class="action-button" onclick="exportGame()">📥 Export</button>
+                    <button class="action-button" onclick="importGame()">📤 Import</button>
+                    <button class="action-button" onclick="resetGame()">🔄 Reset</button>
+                </div>
             </div>
         </div>
     </div>
