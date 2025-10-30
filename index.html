@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdVenture Capitalist - Phase 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .header {
+            background-color: #2a7f5e;
+            color: #ffffff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .close-btn:hover {
+            opacity: 0.8;
+        }
+
+        .currency-display {
+            background-color: #2a7f5e;
+            color: #ffffff;
+            padding: 12px 15px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .currency-item {
+            display: flex;
+            align-items: center;
+            margin: 3px 0;
+        }
+
+        .currency-item span:first-child {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .businesses-container {
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: #f5f5f5;
+        }
+
+        .business-card {
+            background-color: white;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+
+        .business-card:hover {
+            background-color: #fafafa;
+        }
+
+        .business-card:active {
+            background-color: #efefef;
+        }
+
+        .business-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .business-title {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 15px;
+            color: #333333;
+        }
+
+        .business-icon {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+
+        .business-profit {
+            color: #666666;
+            font-size: 13px;
+        }
+
+        .progress-bar-container {
+            background-color: #d0d0d0;
+            height: 20px;
+            border-radius: 3px;
+            margin: 8px 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            background-color: #8bc4d4;
+            height: 100%;
+            transition: width 0.05s linear;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-text {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #333333;
+            font-weight: bold;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .business-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 13px;
+            color: #666666;
+        }
+
+        .owned-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .owned-count {
+            background-color: #fff3e0;
+            border-radius: 3px;
+            padding: 2px 6px;
+            margin-left: 4px;
+            color: #ff9800;
+            font-weight: bold;
+        }
+
+        .buy-button {
+            width: 100%;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.1s;
+        }
+
+        .buy-button:hover:not(:disabled) {
+            background-color: #f57c00;
+        }
+
+        .buy-button:active:not(:disabled) {
+            background-color: #e65100;
+        }
+
+        .buy-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .tabs-section {
+            background-color: #2a7f5e;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .tab-button {
+            background-color: #1d5a46;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: not-allowed;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .tab-button:hover {
+            opacity: 0.6;
+        }
+
+        .tabs-row-2 {
+            background-color: #2a7f5e;
+            padding: 6px 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .buttons-section {
+            background-color: #2a7f5e;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .action-button {
+            background-color: #1d5a46;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            flex: 1;
+            transition: background-color 0.1s;
+        }
+
+        .action-button:hover {
+            background-color: #0f3d2f;
+        }
+
+        .action-button:active {
+            background-color: #082a21;
+        }
+
+        .menu-button {
+            background-color: #1d5a46;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+
+        .menu-button:hover {
+            background-color: #0f3d2f;
+        }
+
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            z-index: 1000;
+            font-weight: bold;
+            animation: slideDown 0.3s ease, slideUp 0.3s ease 1.7s;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(-50%) translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        #notification.show {
+            display: block;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8bc4d4;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <div class="header">
+            <span>AdVenture Capitalist</span>
+            <button class="close-btn" onclick="closeGame()">✕</button>
+        </div>
+
+        <!-- Currency Display -->
+        <div class="currency-display">
+            <div class="currency-item">
+                <span>💵</span>
+                <span>Dollars: <span id="dollars-display">0.00</span></span>
+            </div>
+            <div class="currency-item">
+                <span>🏆</span>
+                <span>Angels: <span id="angels-display">0.00</span></span>
+            </div>
+            <div class="currency-item">
+                <span>🪙</span>
+                <span>Gold: <span id="gold-display">8</span></span>
+            </div>
+            <div class="currency-item">
+                <span>💎</span>
+                <span>Megabucks: <span id="megabucks-display">0.00</span></span>
+            </div>
+        </div>
+
+        <!-- Businesses Container -->
+        <div class="businesses-container" id="businesses-container">
+            <!-- Business cards will be generated here -->
+        </div>
+
+        <!-- Tab Buttons Row 1 -->
+        <div class="tabs-section">
+            <button class="tab-button" title="Coming in Phase 2">📊 Stats</button>
+            <button class="tab-button" title="Coming in Phase 2">⚡ Upgrades</button>
+            <button class="tab-button" title="Coming in Phase 2">👔 Managers</button>
+            <button class="tab-button" title="Coming in Phase 2">👨 Investors</button>
+        </div>
+
+        <!-- Tab Buttons Row 2 -->
+        <div class="tabs-row-2">
+            <button class="tab-button" title="Coming in Phase 2">🛍️ Shop</button>
+            <button class="tab-button" title="Coming in Phase 2">🎮 Mini Games</button>
+            <button class="tab-button" title="Coming in Phase 2">🎯 Adventures</button>
+            <button class="tab-button" title="Coming in Phase 2">🎲 Cheats</button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="buttons-section">
+            <div class="button-row">
+                <button class="action-button" onclick="exportGame()">📥 Export</button>
+                <button class="action-button" onclick="importGame()">📤 Import</button>
+                <button class="action-button" onclick="resetGame()">🔄 Reset</button>
+            </div>
+            <div class="button-row">
+                <button class="menu-button" style="width: 100%;">☰ Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="file-input" accept=".json" onchange="handleFileImport(event)">
+
+    <script>
+        // ============================================
+        // GAME DATA & STATE INITIALIZATION
+        // ============================================
+
+        const BUSINESSES_DATA = [
+            {
+                id: 'lemonade',
+                name: 'Lemonade Stand',
+                icon: '🍋',
+                basePrice: 1,
+                profitPerUnit: 0.01,
+                speed: 0.1,
+                priceMultiplier: 1.07
+            },
+            {
+                id: 'newspaper',
+                name: 'Newspaper Delivery',
+                icon: '📰',
+                basePrice: 60,
+                profitPerUnit: 0.50,
+                speed: 0.4,
+                priceMultiplier: 1.10
+            },
+            {
+                id: 'carwash',
+                name: 'Car Wash',
+                icon: '🚗',
+                basePrice: 720,
+                profitPerUnit: 8.00,
+                speed: 1.8,
+                priceMultiplier: 1.14
+            },
+            {
+                id: 'pizza',
+                name: 'Pizza Delivery',
+                icon: '🍕',
+                basePrice: 8640,
+                profitPerUnit: 150.00,
+                speed: 5.3,
+                priceMultiplier: 1.14
+            }
+        ];
+
+        let gameState = {
+            dollars: 0,
+            businesses: []
+        };
+
+        // Initialize game state
+        function initializeGameState() {
+            gameState.businesses = BUSINESSES_DATA.map(business => ({
+                id: business.id,
+                name: business.name,
+                icon: business.icon,
+                basePrice: business.basePrice,
+                profitPerUnit: business.profitPerUnit,
+                speed: business.speed,
+                priceMultiplier: business.priceMultiplier,
+                owned: 0,
+                nextPayoutAt: Date.now() + (business.speed * 1000)
+            }));
+            renderUI();
+        }
+
+        // Load game from localStorage
+        function loadGame() {
+            const saved = localStorage.getItem('adcap_save');
+            if (saved) {
+                try {
+                    gameState = JSON.parse(saved);
+                    // Ensure all businesses have proper structure
+                    gameState.businesses = gameState.businesses.map((bus, idx) => ({
+                        ...bus,
+                        ...BUSINESSES_DATA[idx],
+                        owned: bus.owned || 0,
+                        nextPayoutAt: bus.nextPayoutAt || Date.now() + (BUSINESSES_DATA[idx].speed * 1000)
+                    }));
+                } catch (e) {
+                    console.error('Failed to load game:', e);
+                    initializeGameState();
+                }
+            } else {
+                initializeGameState();
+            }
+        }
+
+        // Save game to localStorage
+        function saveGame() {
+            localStorage.setItem('adcap_save', JSON.stringify(gameState));
+        }
+
+        // ============================================
+        // CURRENCY FORMATTING
+        // ============================================
+
+        function formatCurrency(num) {
+            if (num === 0) return '0.00';
+
+            if (num < 1000) {
+                return num.toFixed(2);
+            } else if (num < 1000000) {
+                return (num / 1000).toFixed(3) + ' K';
+            } else if (num < 1000000000) {
+                return (num / 1000000).toFixed(3) + ' M';
+            } else {
+                return (num / 1000000000).toFixed(3) + ' B';
+            }
+        }
+
+        // ============================================
+        // GAME MECHANICS
+        // ============================================
+
+        function calculateCurrentPrice(business) {
+            return business.basePrice * Math.pow(business.priceMultiplier, business.owned);
+        }
+
+        function getCurrentProfit(business) {
+            return business.profitPerUnit * business.owned;
+        }
+
+        function clickBusiness(businessId) {
+            const business = gameState.businesses.find(b => b.id === businessId);
+            if (!business) return;
+
+            // Instant payout
+            const profit = getCurrentProfit(business);
+            gameState.dollars += profit;
+
+            // Reset progress
+            business.nextPayoutAt = Date.now() + (business.speed * 1000);
+
+            // Re-render and save
+            renderUI();
+            saveGame();
+        }
+
+        function buyBusiness(businessId) {
+            const business = gameState.businesses.find(b => b.id === businessId);
+            if (!business) return;
+
+            const currentPrice = calculateCurrentPrice(business);
+            if (gameState.dollars >= currentPrice) {
+                gameState.dollars -= currentPrice;
+                business.owned += 1;
+                renderUI();
+                saveGame();
+            }
+        }
+
+        // ============================================
+        // GAME LOOP (100ms)
+        // ============================================
+
+        function gameLoop() {
+            const now = Date.now();
+
+            gameState.businesses.forEach(business => {
+                // Auto-payout if ready
+                if (now >= business.nextPayoutAt) {
+                    const profit = getCurrentProfit(business);
+                    gameState.dollars += profit;
+                    business.nextPayoutAt = now + (business.speed * 1000);
+                }
+            });
+
+            renderUI();
+        }
+
+        // Start game loop
+        let gameLoopInterval = setInterval(gameLoop, 100);
+
+        // ============================================
+        // UI RENDERING
+        // ============================================
+
+        function renderUI() {
+            renderCurrencyDisplay();
+            renderBusinessCards();
+        }
+
+        function renderCurrencyDisplay() {
+            document.getElementById('dollars-display').textContent = formatCurrency(gameState.dollars);
+            document.getElementById('angels-display').textContent = '0.00';
+            document.getElementById('gold-display').textContent = '8';
+            document.getElementById('megabucks-display').textContent = '0.00';
+        }
+
+        function renderBusinessCards() {
+            const container = document.getElementById('businesses-container');
+            container.innerHTML = '';
+
+            gameState.businesses.forEach(business => {
+                const card = document.createElement('div');
+                card.className = 'business-card';
+
+                const currentProfit = getCurrentProfit(business);
+                const currentPrice = calculateCurrentPrice(business);
+                const canAfford = gameState.dollars >= currentPrice;
+                const now = Date.now();
+                const timeSinceLast = Math.max(0, now - (business.nextPayoutAt - (business.speed * 1000)));
+                const progressPercent = Math.min((timeSinceLast / (business.speed * 1000)) * 100, 100);
+
+                const profitDisplay = currentProfit === 0 ? '$0' : '$' + formatCurrency(currentProfit);
+
+                card.innerHTML = `
+                    <div class="business-header">
+                        <div class="business-title">
+                            <span class="business-icon">${business.icon}</span>
+                            <span>${business.name}</span>
+                        </div>
+                        <div class="business-profit">Profit: ${profitDisplay}</div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: ${progressPercent}%"></div>
+                        <div class="progress-text">${(business.speed * (100 - progressPercent) / 100).toFixed(1)}s</div>
+                    </div>
+                    <div class="business-stats">
+                        <div class="owned-info">
+                            Owned: <span class="owned-count">${business.owned}</span>
+                        </div>
+                    </div>
+                    <button class="buy-button" ${!canAfford ? 'disabled' : ''} onclick="buyBusiness('${business.id}')">
+                        Buy x1 ${formatCurrency(currentPrice)}
+                    </button>
+                `;
+
+                // Add click handler for entire card (except button)
+                card.addEventListener('click', (e) => {
+                    // Don't trigger card click if button was clicked
+                    if (e.target.classList.contains('buy-button')) return;
+                    clickBusiness(business.id);
+                });
+
+                container.appendChild(card);
+            });
+        }
+
+        // ============================================
+        // SAVE / LOAD / RESET
+        // ============================================
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.backgroundColor = type === 'success' ? '#4caf50' : '#f44336';
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        function exportGame() {
+            const dataStr = JSON.stringify(gameState, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `adcap_save_${Date.now()}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            showNotification('Game exported!');
+        }
+
+        function importGame() {
+            document.getElementById('file-input').click();
+        }
+
+        function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+
+                    // Validate structure
+                    if (!imported.dollars || !imported.businesses) {
+                        throw new Error('Invalid save file format');
+                    }
+
+                    gameState = imported;
+                    // Ensure all businesses have proper structure
+                    gameState.businesses = gameState.businesses.map((bus, idx) => ({
+                        ...bus,
+                        ...BUSINESSES_DATA[idx],
+                        owned: bus.owned || 0,
+                        nextPayoutAt: bus.nextPayoutAt || Date.now() + (BUSINESSES_DATA[idx].speed * 1000)
+                    }));
+
+                    renderUI();
+                    saveGame();
+                    showNotification('Game imported!');
+                } catch (error) {
+                    showNotification('Invalid save file: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+
+            // Reset input so same file can be imported again
+            event.target.value = '';
+        }
+
+        function resetGame() {
+            if (confirm('Reset all progress? This cannot be undone.')) {
+                gameState.dollars = 0;
+                gameState.businesses.forEach(business => {
+                    business.owned = 0;
+                    business.nextPayoutAt = Date.now() + (business.speed * 1000);
+                });
+                renderUI();
+                saveGame();
+                showNotification('Progress reset!');
+            }
+        }
+
+        function closeGame() {
+            alert('Game window closed. Your progress is saved.');
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        loadGame();
+    </script>
+</body>
+</html>
